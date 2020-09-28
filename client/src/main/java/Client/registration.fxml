@@ -1,0 +1,19 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<Pane prefHeight="400" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.Registration">
+   <children>
+      <Label contentDisplay="CENTER" layoutX="221.0" layoutY="14.0" prefHeight="76.0" prefWidth="142.0" text="Регистрация" textAlignment="CENTER">
+         <font>
+            <Font size="23.0" />
+         </font></Label>
+      <Label layoutX="157.0" layoutY="90.0" prefHeight="25.0" prefWidth="52.0" text="Никнейм" />
+      <Label layoutX="169.0" layoutY="139.0" prefHeight="25.0" prefWidth="52.0" text="Логин" textAlignment="CENTER" />
+      <Label layoutX="163.0" layoutY="187.0" prefHeight="25.0" prefWidth="52.0" text="Пароль" />
+      <TextField fx:id="nickField" promptText="Введите никнейм" alignment="CENTER" layoutX="221.0" layoutY="90.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="234.0" />
+      <TextField fx:id="loginField" promptText="Введите логин" layoutX="221.0" layoutY="139.0" prefHeight="25.0" prefWidth="234.0" />
+      <PasswordField fx:id="passField" layoutX="221.0" layoutY="187.0" prefHeight="25.0" prefWidth="234.0" />
+      <TextArea fx:id="textArea"/>
+      <Button fx:id="regBtn" onAction="#clickOK" layoutX="221.0" layoutY="244.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="171.0" text="Зарегистрироваться" />
+   </children>
+</Pane>

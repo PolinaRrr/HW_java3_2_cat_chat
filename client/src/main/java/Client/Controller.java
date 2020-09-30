@@ -51,6 +51,7 @@ public class Controller implements Initializable {
     final int PORT = 8290;
 
     private boolean authendicate;
+    private String login;
     private String nick;
     private Stage stage;
     private Stage registrate;
@@ -67,6 +68,7 @@ public class Controller implements Initializable {
 
         if (!authendicate) {
             nick = "";
+            ChatHistory.end();
         }
         textArea.clear();
         setTitle(nick);
@@ -112,6 +114,8 @@ public class Controller implements Initializable {
 
                                 nick = str.split(" ")[1];
                                 setAuthendicate(true);
+                                textArea.appendText(ChatHistory.getLastStringOfHistory(login));
+                                ChatHistory.begin(login);
                                 break;
                             }
                             if (str.startsWith("/regok")) {
@@ -157,6 +161,7 @@ public class Controller implements Initializable {
                             }
                         } else {
                             textArea.appendText(str + "\n");
+                            ChatHistory.writeInLine(str);
                         }
 
                     }
@@ -198,6 +203,7 @@ public class Controller implements Initializable {
         try {
             out.writeUTF("/auth " + loginField.getText().trim() + " " + password.getText());
             password.clear();
+            login = loginField.getText();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -206,7 +212,7 @@ public class Controller implements Initializable {
     private void setTitle(String nick) {
 
         Platform.runLater(() -> {
-            ((Stage) textField.getScene().getWindow()).setTitle("CatChat"+ " " + nick);
+            //((Stage) textField.getScene().getWindow()).setTitle("CatChat"+ " " + nick);
         });
     }
 

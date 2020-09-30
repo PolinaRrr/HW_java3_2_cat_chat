@@ -66,8 +66,6 @@ public class ClientHandler {
                                         System.out.println("Клиент: " + nick + " подключен");
                                         socket.setSoTimeout(0);
 
-                                        //сообщение пользователю через БД
-                                        sendMsg(SQLHandler.getMsgForNick(nick));
                                         break;
                                     }else{
                                         sendMsg("Данный логин уже авторизован");
@@ -104,7 +102,7 @@ public class ClientHandler {
                                     continue;
                                 }if(server.getAuthService().changeNick(this.nick,token[1])){
                                     sendMsg(" Ваш ник изменен на на " + token[1]);
-                                    this.nick=nick;
+                                    this.nick=token[1];
                                     server.broadCastClientList();
                                 }else {
                                     sendMsg(" Не удалось изменить ник на "+token[1]);

@@ -39,7 +39,6 @@ public class Controller implements Initializable {
     public PasswordField password;
     @FXML
     public Button enter;
-
     @FXML
     public ListView<String> listClients;
 
@@ -53,7 +52,6 @@ public class Controller implements Initializable {
 
     private boolean authendicate;
     private String nick;
-    private final String TITLE = "Cat Chat";
     private Stage stage;
     private Stage registrate;
     private Registration registration;
@@ -149,6 +147,14 @@ public class Controller implements Initializable {
                                     }
                                 });
                             }
+                            if(str.equals("/end")){
+                                break;
+                            }
+                           //отображение ника
+                            if(str.startsWith("/unick ")){
+                                nick=str.split(" ")[1];
+                                setTitle(nick);
+                            }
                         } else {
                             textArea.appendText(str + "\n");
                         }
@@ -200,7 +206,7 @@ public class Controller implements Initializable {
     private void setTitle(String nick) {
 
         Platform.runLater(() -> {
-            ((Stage) textField.getScene().getWindow()).setTitle(TITLE + " " + nick);
+            ((Stage) textField.getScene().getWindow()).setTitle("CatChat"+ " " + nick);
         });
     }
 

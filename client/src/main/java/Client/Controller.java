@@ -39,7 +39,6 @@ public class Controller implements Initializable {
     public PasswordField password;
     @FXML
     public Button enter;
-
     @FXML
     public ListView<String> listClients;
 
@@ -52,8 +51,8 @@ public class Controller implements Initializable {
     final int PORT = 8290;
 
     private boolean authendicate;
+    private String login;
     private String nick;
-    private final String TITLE = "Cat Chat";
     private Stage stage;
     private Stage registrate;
     private Registration registration;
@@ -69,6 +68,7 @@ public class Controller implements Initializable {
 
         if (!authendicate) {
             nick = "";
+            ChatHistory.end();
         }
         textArea.clear();
         setTitle(nick);
@@ -114,6 +114,8 @@ public class Controller implements Initializable {
 
                                 nick = str.split(" ")[1];
                                 setAuthendicate(true);
+                                textArea.appendText(ChatHistory.getLastStringOfHistory(login));
+                                ChatHistory.begin(login);
                                 break;
                             }
                             if (str.startsWith("/regok")) {
@@ -149,8 +151,17 @@ public class Controller implements Initializable {
                                     }
                                 });
                             }
+                            if(str.equals("/end")){
+                                break;
+                            }
+                           //отображение ника
+                            if(str.startsWith("/unick ")){
+                                nick=str.split(" ")[1];
+                                setTitle(nick);
+                            }
                         } else {
                             textArea.appendText(str + "\n");
+                            ChatHistory.writeInLine(str);
                         }
 
                     }
@@ -192,6 +203,7 @@ public class Controller implements Initializable {
         try {
             out.writeUTF("/auth " + loginField.getText().trim() + " " + password.getText());
             password.clear();
+            login = loginField.getText();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -200,7 +212,7 @@ public class Controller implements Initializable {
     private void setTitle(String nick) {
 
         Platform.runLater(() -> {
-            ((Stage) textField.getScene().getWindow()).setTitle(TITLE + " " + nick);
+            //((Stage) textField.getScene().getWindow()).setTitle("CatChat"+ " " + nick);
         });
     }
 

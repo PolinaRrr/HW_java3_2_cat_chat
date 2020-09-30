@@ -65,6 +65,7 @@ public class ClientHandler {
                                         server.subscrible(this);
                                         System.out.println("Клиент: " + nick + " подключен");
                                         socket.setSoTimeout(0);
+
                                         break;
                                     }else{
                                         sendMsg("Данный логин уже авторизован");
@@ -84,21 +85,37 @@ public class ClientHandler {
                                 sendMsg("/end");
                                 break;
                             }
-                            if ((str.startsWith("/w "))) {
+                            if (str.startsWith("/w ")) {
                                 String[] token = str.split(" ", 3);
                                 if (token.length < 3) {
                                     continue;
                                 }
                                 server.privateMsg(this, token[1], token[2]);
                             }
+                            if (str.startsWith("/newnick")){
+                                String[] token = str.split("",2);
+                                if(token.length<2){
+                                    continue;
+                                }
+                                if(token[1].contains(" ")){
+                                    sendMsg(" Нельзя использовать в никнейме пробелы");
+                                    continue;
+                                }if(server.getAuthService().changeNick(this.nick,token[1])){
+                                    sendMsg(" Ваш ник изменен на на " + token[1]);
+                                    this.nick=token[1];
+                                    server.broadCastClientList();
+                                }else {
+                                    sendMsg(" Не удалось изменить ник на "+token[1]);
+                                }
+                            }
                         } else {
-                            server.broadCastMsg(nick, str);
+                            server.broadCastMsg(this, str);
                         }
                     }
                 }
                 catch (SocketTimeoutException e) {
                     sendMsg("/end ");
-                    System.out.println("Rлиент отключился по таймауту");
+                    System.out.println("Клиент отключился по таймауту");
                 }
                 catch (IOException e) {
                     e.printStackTrace();

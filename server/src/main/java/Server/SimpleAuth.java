@@ -46,6 +46,11 @@ public class SimpleAuth implements AuthService {
         return true;
     }
 
+    @Override
+    public boolean changeNick(String oldNick, String newNick) {
+        return false;
+    }
+
 
     public String getLogin(String login) {
         for (UserData c : users) {

@@ -3,6 +3,8 @@ package Server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 
@@ -36,6 +38,7 @@ public class Server {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
+            SQLHandler.disconnect();
             try {
                 server.close();
             } catch (IOException e) {
@@ -45,9 +48,14 @@ public class Server {
     }
 
     //метод вывода всех сообщений от всех клиентов в текстарея
-    public void broadCastMsg(String nick, String msg) {
+    public void broadCastMsg(ClientHandler sender, String msg) {
+        SimpleDateFormat sdform = new SimpleDateFormat("HH:mm");
+        String strMsg = String.format(" : ", sdform.format(new Date()), sender.getNick(), msg);
+
+        SQLHandler.addMsg(sender.getNick(), "null", msg, sdform.format(new Date()));
+
         for (ClientHandler c : clients) {
-            c.sendMsg(nick + ": " + msg);
+            c.sendMsg(strMsg);
         }
     }
 
@@ -55,8 +63,9 @@ public class Server {
     public void privateMsg(ClientHandler sender, String receiver, String msg) {
         String message = String.format("[ %s ] private [ %s ] : %s", sender.getNick(), receiver, msg);
         for (ClientHandler c : clients) {
-            if (c.getNick().equals(receiver)){
+            if (c.getNick().equals(receiver)) {
                 c.sendMsg(message);
+                SQLHandler.addMsg(sender.getNick(),receiver,msg,"Ранее ...");
                 if (!sender.getNick().equals(receiver)) {
                     sender.sendMsg(message);
                 }
@@ -82,16 +91,18 @@ public class Server {
     public AuthService getAuthService() {
         return authService;
     }
-    public boolean isLoginAuth(String login){
+
+    public boolean isLoginAuth(String login) {
         for (ClientHandler c : clients) {
-            if (c.getLogin().equals(login)){
+            if (c.getLogin().equals(login)) {
                 return true;
             }
         }
         return false;
     }
+
     public void broadCastClientList() {
-        StringBuilder stringBuilder=new StringBuilder("/client ");
+        StringBuilder stringBuilder = new StringBuilder("/client ");
         for (ClientHandler c : clients) {
             stringBuilder.append(c.getNick()).append(" ");
         }
